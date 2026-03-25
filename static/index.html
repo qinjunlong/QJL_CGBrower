@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CG Asset Table</title>
+
+  <!-- 引入 Vue 3 CDN（全局构建版本，适合无构建工具的环境） -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    /* ===== 全局基础样式 ===== */
+    body {
+      font-family: Arial, sans-serif;
+      background: #100c14;
+      padding: 20px;
+    }
+
+    /* ===== 资产表格样式 ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;           /* 合并单元格边框，避免双线 */
+      background: rgb(158, 172, 110);
+    }
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    /* 表头单独加深背景，便于区分 */
+    th {
+      background: #eee;
+    }
+
+    /* ===== 预览缩略图 / 预览视频 通用尺寸 ===== */
+    .preview {
+      width: 120px;
+      height: 70px;
+      object-fit: cover;                   /* 保持比例裁切填满区域 */
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== Vue 挂载根节点 ===== -->
+  <div id="app">
+
+    <h2>CG 资产管理</h2>
+
+    <!-- 资产列表表格 -->
+    <table>
+
+      <!-- 表头 -->
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>软件</th>
+          <th>类型</th>
+          <th>相关卡</th>
+          <th>版本</th>
+          <th>文件路径</th>
+          <th>预览</th>
+        </tr>
+      </thead>
+
+      <!-- 表体：通过 v-for 遍历 assets 数组动态渲染每一行 -->
+      <tbody>
+        <tr v-for="asset in assets" :key="asset.id">
+          <td>{{ asset.id }}</td>
+          <td>{{ asset.name }}</td>
+          <td>{{ asset.software }}</td>
+          <td>{{ asset.category }}</td>
+          <td>{{ asset.association }}</td>
+          <td>{{ asset.version }}</td>
+          <td>{{ asset.file_path }}</td>
+
+          <!-- 预览列：根据文件后缀判断是图片还是视频 -->
+          <td>
+            <!-- 图片预览：后缀为 .jpg / .jpeg / .png 时显示 -->
+            <img
+              v-if="isImage(asset.previewUrl)"
+              :src="asset.previewUrl"
+              class="preview"
+              alt="资产预览图"
+            />
+
+            <!-- 视频预览：其余格式（如 .mp4）自动播放、静音、循环 -->
+            <video
+              v-else
+              :src="asset.previewUrl"
+              class="preview"
+              autoplay
+              muted
+              loop
+            ></video>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div><!-- /#app -->
+
+  <script>
+    // 从 Vue 全局对象中解构出 createApp 方法
+    const { createApp } = Vue
+
+    createApp({
+
+      // ===== 响应式数据 =====
+      data() {
+        return {
+          assets: []   // 资产列表，初始为空，由接口填充
+        }
+      },
+
+      // ===== 生命周期钩子：组件挂载完成后请求数据 =====
+      mounted() {
+        // 向本地后端服务请求资产列表（确保后端已在 8000 端口运行）
+        fetch('http://127.0.0.1:8000/assets')
+          .then(res => res.json())       // 将响应体解析为 JSON
+          .then(data => {
+            this.assets = data           // 写入响应式数据，表格自动更新
+          })
+          .catch(err => {
+            // 请求失败时在控制台输出错误，便于调试
+            console.error('资产数据加载失败：', err)
+          })
+      },
+
+      // ===== 方法 =====
+      methods: {
+
+        /**
+         * 判断给定路径是否为图片文件
+         * @param {string} path - 文件路径或 URL
+         * @returns {boolean} 是图片返回 true，否则返回 false
+         */
+        isImage(path) {
+          if (!path) return false   // 路径为空时直接返回 false，防止报错
+          const lower = path.toLowerCase()
+          return lower.endsWith('.jpg')
+              || lower.endsWith('.jpeg')
+              || lower.endsWith('.png')
+        }
+
+      }
+
+    }).mount('#app')   // 将 Vue 应用挂载到 #app 节点
+  </script>
+
+</body>
+</html>
