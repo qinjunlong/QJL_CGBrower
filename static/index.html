@@ -14,13 +14,80 @@
       font-family: Arial, sans-serif;
       background: #100c14;
       padding: 20px;
+      color: #333;
+    }
+
+    /* ===== 容器 ===== */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ===== 标题和按钮区域 ===== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h2 {
+      margin: 0;
+      color: #fff;
+    }
+
+    /* ===== 按钮通用样式 ===== */
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #45a049;
+    }
+
+    .btn-edit {
+      background: #2196F3;
+      color: white;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .btn-edit:hover {
+      background: #0b7dda;
+    }
+
+    .btn-delete {
+      background: #f44336;
+      color: white;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .btn-delete:hover {
+      background: #da190b;
     }
 
     /* ===== 资产表格样式 ===== */
     table {
       width: 100%;
-      border-collapse: collapse;           /* 合并单元格边框，避免双线 */
+      border-collapse: collapse;
       background: rgb(158, 172, 110);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     th,
@@ -30,84 +97,295 @@
       text-align: left;
     }
 
-    /* 表头单独加深背景，便于区分 */
+    /* 表头单独加深背景 */
     th {
       background: #eee;
+      font-weight: bold;
     }
 
-    /* ===== 预览缩略图 / 预览视频 通用尺寸 ===== */
+    tr:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ===== 预览缩略图 / 预览视频 ===== */
     .preview {
       width: 120px;
       height: 70px;
-      object-fit: cover;                   /* 保持比例裁切填满区域 */
+      object-fit: cover;
+    }
+
+    /* ===== 模态对话框 ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-cancel {
+      background: #999;
+      color: white;
+    }
+
+    .btn-cancel:hover {
+      background: #777;
+    }
+
+    .btn-submit {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-submit:hover {
+      background: #45a049;
+    }
+
+    /* ===== 提示消息 ===== */
+    .message {
+      padding: 12px 16px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* ===== 响应式设计 ===== */
+    @media (max-width: 768px) {
+      table {
+        font-size: 12px;
+      }
+
+      th,
+      td {
+        padding: 5px;
+      }
+
+      .preview {
+        width: 80px;
+        height: 50px;
+      }
+
+      .btn-edit,
+      .btn-delete {
+        padding: 3px 6px;
+        font-size: 11px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ===== Vue 挂载根节点 ===== -->
   <div id="app">
+    <div class="container">
 
-    <h2>CG 资产管理</h2>
+      <!-- 标题和新增按钮 -->
+      <div class="header">
+        <h2>CG 资产管理</h2>
+        <button class="btn-primary" @click="openCreateModal">+ 添加新资产</button>
+      </div>
 
-    <!-- 资产列表表格 -->
-    <table>
+      <!-- 提示消息 -->
+      <div v-if="message.text" :class="['message', message.type]">
+        {{ message.text }}
+      </div>
 
-      <!-- 表头 -->
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>名称</th>
-          <th>软件</th>
-          <th>类型</th>
-          <th>相关卡</th>
-          <th>版本</th>
-          <th>文件路径</th>
-          <th>预览</th>
-        </tr>
-      </thead>
+      <!-- 资产列表表格 -->
+      <table v-if="assets.length > 0">
 
-      <!-- 表体：通过 v-for 遍历 assets 数组动态渲染每一行 -->
-      <tbody>
-        <tr v-for="asset in assets" :key="asset.id">
-          <td>{{ asset.id }}</td>
-          <td>{{ asset.name }}</td>
-          <td>{{ asset.software }}</td>
-          <td>{{ asset.category }}</td>
-          <td>{{ asset.association }}</td>
-          <td>{{ asset.version }}</td>
-          <td>{{ asset.file_path }}</td>
+        <!-- 表头 -->
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>软件</th>
+            <th>类型</th>
+            <th>相关卡</th>
+            <th>版本</th>
+            <th>文件路径</th>
+            <th>预览</th>
+            <th style="width: 120px;">操作</th>
+          </tr>
+        </thead>
 
-          <!-- 预览列：根据文件后缀判断是图片还是视频 -->
-          <td>
-            <!-- 图片预览：后缀为 .jpg / .jpeg / .png 时显示 -->
-            <img
-              v-if="isImage(asset.previewUrl)"
-              :src="asset.previewUrl"
-              class="preview"
-              alt="资产预览图"
-            />
+        <!-- 表体 -->
+        <tbody>
+          <tr v-for="asset in assets" :key="asset.id">
+            <td>{{ asset.id }}</td>
+            <td>{{ asset.name }}</td>
+            <td>{{ asset.software }}</td>
+            <td>{{ asset.category }}</td>
+            <td>{{ asset.association }}</td>
+            <td>{{ asset.version }}</td>
+            <td>{{ asset.file_path }}</td>
 
-            <!-- 视频预览：其余格式（如 .mp4）自动播放、静音、循环 -->
-            <video
-              v-else
-              :src="asset.previewUrl"
-              class="preview"
-              autoplay
-              muted
-              loop
-            ></video>
-          </td>
-        </tr>
-      </tbody>
+            <!-- 预览列 -->
+            <td>
+              <img
+                v-if="isImage(asset.previewUrl)"
+                :src="asset.previewUrl"
+                class="preview"
+                alt="资产预览图"
+              />
+              <video
+                v-else
+                :src="asset.previewUrl"
+                class="preview"
+                autoplay
+                muted
+                loop
+              ></video>
+            </td>
 
-    </table>
+            <!-- 操作列 -->
+            <td>
+              <button class="btn-edit" @click="openEditModal(asset)">编辑</button>
+              <button class="btn-delete" @click="deleteAsset(asset.id)">删除</button>
+            </td>
+          </tr>
+        </tbody>
 
-  </div><!-- /#app -->
+      </table>
+
+      <!-- 空状态提示 -->
+      <div v-else style="text-align: center; color: #aaa; padding: 40px;">
+        <p>暂无资产数据</p>
+      </div>
+
+    </div>
+
+    <!-- ===== 创建/编辑资产对话框 ===== -->
+    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+      <div class="modal">
+
+        <div class="modal-header">
+          <h3>{{ isEditMode ? '编辑资产' : '添加新资产' }}</h3>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label>名称 *</label>
+            <input v-model="formData.name" type="text" placeholder="输入资产名称" />
+          </div>
+
+          <div class="form-group">
+            <label>软件 *</label>
+            <input v-model="formData.software" type="text" placeholder="例如: Maya, Blender" />
+          </div>
+
+          <div class="form-group">
+            <label>类型 *</label>
+            <input v-model="formData.category" type="text" placeholder="例如: 角色, 道具, 环境" />
+          </div>
+
+          <div class="form-group">
+            <label>相关卡</label>
+            <input v-model="formData.association" type="text" placeholder="关联的卡片ID或名称" />
+          </div>
+
+          <div class="form-group">
+            <label>版本 *</label>
+            <input v-model="formData.version" type="text" placeholder="例如: v1.0" />
+          </div>
+
+          <div class="form-group">
+            <label>文件路径 *</label>
+            <input v-model="formData.file_path" type="text" placeholder="例如: /assets/character/hero.mb" />
+          </div>
+
+          <div class="form-group">
+            <label>预览 URL *</label>
+            <input v-model="formData.previewUrl" type="text" placeholder="例如: /img/preview.jpg 或 /video/preview.mp4" />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancel" @click="closeModal">取消</button>
+          <button class="btn-submit" @click="submitForm">{{ isEditMode ? '更新' : '创建' }}</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 
   <script>
-    // 从 Vue 全局对象中解构出 createApp 方法
     const { createApp } = Vue
 
     createApp({
@@ -115,44 +393,210 @@
       // ===== 响应式数据 =====
       data() {
         return {
-          assets: []   // 资产列表，初始为空，由接口填充
+          assets: [],
+          showModal: false,
+          isEditMode: false,
+          editingId: null,
+          formData: {
+            name: '',
+            software: '',
+            category: '',
+            association: '',
+            version: '',
+            file_path: '',
+            previewUrl: ''
+          },
+          message: {
+            text: '',
+            type: '' // 'success' 或 'error'
+          }
         }
       },
 
-      // ===== 生命周期钩子：组件挂载完成后请求数据 =====
+      // ===== 生命周期钩子 =====
       mounted() {
-        // 向本地后端服务请求资产列表（确保后端已在 8000 端口运行）
-        fetch('http://127.0.0.1:8000/assets')
-          .then(res => res.json())       // 将响应体解析为 JSON
-          .then(data => {
-            this.assets = data           // 写入响应式数据，表格自动更新
-          })
-          .catch(err => {
-            // 请求失败时在控制台输出错误，便于调试
-            console.error('资产数据加载失败：', err)
-          })
+        this.loadAssets()
       },
 
       // ===== 方法 =====
       methods: {
 
         /**
-         * 判断给定路径是否为图片文件
-         * @param {string} path - 文件路径或 URL
-         * @returns {boolean} 是图片返回 true，否则返回 false
+         * 加载所有资产
+         */
+        loadAssets() {
+          fetch('http://127.0.0.1:8000/assets')
+            .then(res => res.json())
+            .then(data => {
+              this.assets = data
+            })
+            .catch(err => {
+              console.error('资产数据加载失败：', err)
+              this.showMessage('加载资产失败', 'error')
+            })
+        },
+
+        /**
+         * 打开创建资产的对话框
+         */
+        openCreateModal() {
+          this.isEditMode = false
+          this.editingId = null
+          this.resetForm()
+          this.showModal = true
+        },
+
+        /**
+         * 打开编辑资产的对话框
+         */
+        openEditModal(asset) {
+          this.isEditMode = true
+          this.editingId = asset.id
+          this.formData = {
+            name: asset.name,
+            software: asset.software,
+            category: asset.category,
+            association: asset.association,
+            version: asset.version,
+            file_path: asset.file_path,
+            previewUrl: asset.previewUrl
+          }
+          this.showModal = true
+        },
+
+        /**
+         * 关闭对话框
+         */
+        closeModal() {
+          this.showModal = false
+          this.resetForm()
+        },
+
+        /**
+         * 重置表单
+         */
+        resetForm() {
+          this.formData = {
+            name: '',
+            software: '',
+            category: '',
+            association: '',
+            version: '',
+            file_path: '',
+            previewUrl: ''
+          }
+        },
+
+        /**
+         * 提交表单（创建或更新）
+         */
+        submitForm() {
+          // 验证必填字段
+          if (!this.formData.name || !this.formData.software || !this.formData.category ||
+              !this.formData.version || !this.formData.file_path || !this.formData.previewUrl) {
+            this.showMessage('请填写所有必填字段 (*)', 'error')
+            return
+          }
+
+          if (this.isEditMode) {
+            this.updateAsset()
+          } else {
+            this.createAsset()
+          }
+        },
+
+        /**
+         * 创建新资产
+         */
+        createAsset() {
+          fetch('http://127.0.0.1:8000/assets', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.formData)
+          })
+            .then(res => res.json())
+            .then(data => {
+              this.showMessage('资产创建成功', 'success')
+              this.closeModal()
+              this.loadAssets()
+            })
+            .catch(err => {
+              console.error('创建失败：', err)
+              this.showMessage('创建失败: ' + err.message, 'error')
+            })
+        },
+
+        /**
+         * 更新资产
+         */
+        updateAsset() {
+          fetch(`http://127.0.0.1:8000/assets/${this.editingId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.formData)
+          })
+            .then(res => res.json())
+            .then(data => {
+              this.showMessage('资产更新成功', 'success')
+              this.closeModal()
+              this.loadAssets()
+            })
+            .catch(err => {
+              console.error('更新失败：', err)
+              this.showMessage('更新失败: ' + err.message, 'error')
+            })
+        },
+
+        /**
+         * 删除资产（需要确认）
+         */
+        deleteAsset(id) {
+          if (!confirm('确定要删除这个资产吗？')) {
+            return
+          }
+
+          fetch(`http://127.0.0.1:8000/assets/${id}`, {
+            method: 'DELETE'
+          })
+            .then(res => res.json())
+            .then(data => {
+              this.showMessage('资产删除成功', 'success')
+              this.loadAssets()
+            })
+            .catch(err => {
+              console.error('删除失败：', err)
+              this.showMessage('删除失败: ' + err.message, 'error')
+            })
+        },
+
+        /**
+         * 判断是否为图片文件
          */
         isImage(path) {
-          if (!path) return false   // 路径为空时直接返回 false，防止报错
+          if (!path) return false
           const lower = path.toLowerCase()
-          return lower.endsWith('.jpg')
-              || lower.endsWith('.jpeg')
-              || lower.endsWith('.png')
+          return lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.png')
+        },
+
+        /**
+         * 显示提示消息
+         */
+        showMessage(text, type) {
+          this.message = { text, type }
+          setTimeout(() => {
+            this.message = { text: '', type: '' }
+          }, 3000)
         }
 
       }
 
-    }).mount('#app')   // 将 Vue 应用挂载到 #app 节点
+    }).mount('#app')
   </script>
 
 </body>
+
 </html>
